@@ -121,6 +121,15 @@ bot.on('chat', (username, message) => {
   }
 })
 
+
+bot.once('spawn', () => {
+  function watchTarget () {
+    bot.setControlState('jump', true)
+    bot.setControlState('jump', false)
+    break
+  }
+})
+
 bot.on('mount', () => {
   bot.chat(`mounted ${bot.vehicle.objectType}`)
 })
