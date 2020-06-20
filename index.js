@@ -122,7 +122,7 @@ bot.on('chat', (username, message) => {
 })
 
 
-bot.once('spawn', () => {
+bot.on('spawn', () => {
     bot.setControlState('jump', true)
     bot.setControlState('jump', false)
     break
