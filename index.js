@@ -29,7 +29,7 @@ const config = {
 };
 
 const bot = mineflayer.createBot({ //creates a new bot from the config above
-  host: config.host, //imported from config
+  host: config.host, //im ported from config
   port: config.version, //imported from config
   username: config.username, //imported from config
   version: config.version //imported from config
@@ -37,51 +37,158 @@ const bot = mineflayer.createBot({ //creates a new bot from the config above
 
 console.log("Connecting..."); //logs "Connecting..." into the console
 
+let target = null
+
 bot.on('chat', (username, message) => {
-  if (username === bot.username) return;
+  if (username === bot.username) return
+  target = bot.players[username].entity
+  let entity
   switch (message) {
+    case 'forward':
+      bot.setControlState('forward', true)
+      break
+    case 'back':
+      bot.setControlState('back', true)
+      break
+    case 'left':
+      bot.setControlState('left', true)
+      break
+    case 'right':
+      bot.setControlState('right', true)
+      break
+    case 'sprint':
+      bot.setControlState('sprint', true)
+      break
+    case 'stop':
+      bot.clearControlStates()
+      break
+    case 'jump':
+      bot.setControlState('jump', true)
+      bot.setControlState('jump', false)
+      break
+    case 'jump a lot':
+      bot.setControlState('jump', true)
+      break
+    case 'stop jumping':
+      bot.setControlState('jump', false)
+      break
+    case 'attack':
+      entity = nearestEntity()
+      if (entity) {
+        bot.attack(entity, true)
+      } else {
+        bot.chat('no nearby entities')
+      }
+      break
+    case 'mount':
+      entity = nearestEntity('object')
+      if (entity) {
+        bot.mount(entity)
+      } else {
+        bot.chat('no nearby objects')
+      }
+      break
+    case 'dismount':
+      bot.dismount()
+      break
+    case 'move vehicle forward':
+      bot.moveVehicle(0.0, 1.0)
+      break
+    case 'move vehicle backward':
+      bot.moveVehicle(0.0, -1.0)
+      break
+    case 'move vehicle left':
+      bot.moveVehicle(1.0, 0.0)
+      break
+    case 'move vehicle right':
+      bot.moveVehicle(-1.0, 0.0)
+      break
+    case 'tp':
+      bot.entity.position.y += 10
+      break
+    case 'pos':
+      bot.chat(bot.entity.position.toString())
+      break
+    case 'yp':
+      bot.chat(`Yaw ${bot.entity.yaw}, pitch: ${bot.entity.pitch}`)
+      break
     case 'sleep':
-      goToSleep();
-      break;
+      goToSleep()
+      break
     case 'wakeup':
-      wakeUp();
-      break;
+      wakeUp()
+      break
   }
-});
+})
+
+
+bot.once('spawn', () => {
+    bot.setControlState('jump', true)
+    bot.setControlState('jump', false)
+    break
+})
+
+bot.on('mount', () => {
+  bot.chat(`mounted ${bot.vehicle.objectType}`)
+})
+
+bot.on('dismount', (vehicle) => {
+  bot.chat(`dismounted ${vehicle.objectType}`)
+})
 
 bot.on('sleep', () => {
-  bot.chat('Oyasuminasai!');
-});
+  bot.chat('Oyasuminasai!')
+})
 bot.on('wake', () => {
-  bot.chat('Ohayou Gozaimasu');
-});
+  bot.chat('Ohayou Gozaimasu')
+})
+
+function nearestEntity (type) {
+  let id
+  let entity
+  let dist
+  let best = null
+  let bestDistance = null
+  for (id in bot.entities) {
+    entity = bot.entities[id]
+    if (type && entity.type !== type) continue
+    if (entity === bot.entity) continue
+    dist = bot.entity.position.distanceTo(entity.position)
+    if (!best || dist < bestDistance) {
+      best = entity
+      bestDistance = dist
+    }
+  }
+  return best
+}
 
 function goToSleep () {
   const bed = bot.findBlock({
     matching: block => bot.isABed(block)
-  });
+  })
   if (bed) {
     bot.sleep(bed, (err) => {
       if (err) {
-        bot.chat(`Nemurenai yo!: ${err.message}`);
+        bot.chat(`Nemurenai yo!: ${err.message}`)
       } else {
-        bot.chat("Watashi wa nemutte iru");
+        bot.chat("Watashi wa nemutte iru")
       }
-    });
+    })
   } else {
-    bot.chat('Chikaku no beddo wa arimasen');
+    bot.chat('Chikaku no beddo wa arimasen')
   }
 }
 
 function wakeUp () {
   bot.wake((err) => {
     if (err) {
-      bot.chat(`Me ga samenai.: ${err.message}`);
+      bot.chat(`Me ga samenai.: ${err.message}`)
     } else {
-      bot.chat('Okita');
+      bot.chat('Okita')
     }
-  });
+  })
 }
+
 
 bot.on("error", err => console.log(err)); //triggers when there's an error and logs it into the console
 
