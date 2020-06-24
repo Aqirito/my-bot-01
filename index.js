@@ -6,13 +6,14 @@ const wakeDyno = require('woke-dyno');
 const PORT = process.env.PORT || 3000;
 
 const app = express();
-
+app.get("/", (_, res) => res.send("hi"));
 
 app.listen(PORT, () => {
     console.log('Listen on ${ PORT }');
     // Make Heroku server not sleep with call back the heroku app url
     wakeDyno('https://my-bot-0.herokuapp.com/').start();
 });
+
 
 const mineflayer = require("mineflayer");
 
