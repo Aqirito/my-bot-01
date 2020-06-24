@@ -7,11 +7,11 @@ const app = express();
 app.use(express.json());
 
 app.get("/", (_, res) => res.send("hi"));
-//app.listen(process.env.PORT);
+app.listen(process.env.PORT);
 
-//setInterval(() => {
-//  http.get(`http://${process.env.PROJECT_DOMAIN}.herokuapp.com/`);
-//}, 224000);
+setInterval(() => {
+  http.get(`http://${process.env.PROJECT_DOMAIN}.gearhostpreview.com/`);
+}, 224000);
 
 // End of Glitch 24/7
 
