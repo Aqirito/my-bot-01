@@ -1,19 +1,21 @@
 
 const express = require("express");
+const wakeDyno = require("woke-dyno");
 const http = require("http");
-
 const app = express();
-
 app.use(express.json());
 
 app.get("/", (_, res) => res.send("hi"));
 app.listen(process.env.PORT);
 
+app.listen(PORT, () => {
+  wakeDyno(DYNO_URL).start(); // DYNO_URL should be the url of your Heroku app
+});
+
 setInterval(() => {
-  http.get(`http://${process.env.PROJECT_DOMAIN}.gearhostpreview.com/`);
+  http.get(`http://${process.env.PROJECT_DOMAIN}.herokuapp.com/`);
 }, 224000);
 
-// End of Glitch 24/7
 
 const mineflayer = require("mineflayer");
 
