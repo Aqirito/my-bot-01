@@ -3,19 +3,19 @@
 // Required to let uptime robot waving our bot.
 //---------------------------------------------------------------------
 
-const express = require("express");
-const http = require("http");
+//const express = require("express");
+//const http = require("http");
 
-const app = express();
+//const app = express();
 
-app.use(express.json());
+//app.use(express.json());
 
-app.get("/", (_, res) => res.send("hi"));
-app.listen(process.env.PORT);
+//app.get("/", (_, res) => res.send("hi"));
+//app.listen(process.env.PORT);
 
-setInterval(() => {
-  http.get(`http://${process.env.PROJECT_DOMAIN}.herokuapp.com/`);
-}, 224000);
+//setInterval(() => {
+//  http.get(`http://${process.env.PROJECT_DOMAIN}.herokuapp.com/`);
+//}, 224000);
 
 // End of Glitch 24/7
 
@@ -119,13 +119,6 @@ bot.on('chat', (username, message) => {
       wakeUp()
       break
   }
-})
-
-
-bot.once('spawn', () => {
-    bot.setControlState('jump', true)
-    bot.setControlState('jump', false)
-    break
 })
 
 bot.on('mount', () => {
